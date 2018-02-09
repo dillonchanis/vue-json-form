@@ -1,27 +1,109 @@
 # vue-json-form
+Create VueJS powered forms through a JSON schema.
 
-> A Vue.js project
+## Examples
+In your Vue file:
 
-## Build Setup
+```html
+<template>
+  <v-json-form :schema="schema" v-model="model" @submit.prevent="submit" />
+</template>
 
-``` bash
-# install dependencies
-npm install
+<script>
+import v-json-form from 'v-json-form'
+import schema from 'path/to/your/file.json'
 
-# serve with hot reload at localhost:8080
-npm run dev
-
-# build for production with minification
-npm run build
-
-# build for production and view the bundle analyzer report
-npm run build --report
-
-# run unit tests
-npm run unit
-
-# run all tests
-npm test
+export default {
+  components: { v-json-schema },
+  data () {
+    return {
+      schema: schema,
+      model: {}
+    }
+  },
+  methods: {
+    submit: () => axios.post('...', model)
+  }
+}
+</script>
 ```
 
-For a detailed explanation on how things work, check out the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
+vue-json-form supports many attributes available to native HTML form elements.
+
+```json
+{
+  "title": "Your JSON Form",
+  "action": "http://www.mywebsite.com/form",
+  "verb": "POST",
+  "fields": [
+    {
+      "tag": "input",
+      "type": "text",
+      "attributes": {
+        "id": "ID",
+        "name": "Name",
+        "placeholder": "John Doe",
+        "required": true,
+        "minlength": 0,
+        "maxlength": 20,
+        "pattern": "[a-z]",
+        "disabled": false
+      },
+      "validation": {
+        "on": "submit",
+        "errors": {
+          "required": {
+            "message": "A name is required."
+          },
+          "minlength": {
+            "message": "A name must be at least 1 character."
+          },
+          "maxlength": {
+            "message": "A name cannot exceed 20 characters."
+          }
+        }
+      }
+    },
+    {
+      "tag": "input",
+      "type": "email",
+      "attributes": {
+        "id": "Email",
+        "name": "Email",
+        "placeholder": "john@example.com",
+        "required": true
+      }
+    }
+  ]
+}
+```
+
+We can further customize our elements like providing a template or classes.
+
+```json
+{
+  "title": "Your JSON Form",
+  "action": "http://www.mywebsite.com/form",
+  "verb": "POST",
+  "fields": [
+    {
+      "tag": "input",
+      "type": "text",
+      "parent": "div",
+      "parentClass": ["form-group"],
+      "attributes": {
+        "id": "ID",
+        "name": "Name",
+        "placeholder": "John Doe",
+        "class": ["form-control"]
+      }
+    }
+  ]
+}
+```
+
+To have fine tuned control over your templates you can utilize `slot-scope`.
+
+```javascript
+// slot-scope example here
+```
